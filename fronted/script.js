@@ -22,21 +22,21 @@ async function uploadFile() {
             body: formData
         });
 
+        const responseText = await response.text();
+
         if (!response.ok) {
             let errorData;
             try {
-                errorData = await response.json();
+                errorData = JSON.parse(responseText);
             } catch (jsonError) {
-                // If response is not JSON, get text instead
-                const errorText = await response.text();
-                throw new Error(errorText || `HTTP error! status: ${response.status}`);
+                throw new Error(responseText || `HTTP error! status: ${response.status}`);
             }
             throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
         }
 
         let result;
         try {
-            result = await response.json();
+            result = JSON.parse(responseText);
         } catch (jsonError) {
             throw new Error('Invalid response from server');
         }
