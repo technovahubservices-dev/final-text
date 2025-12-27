@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Technova Hub | AI Keyword Dashboard</title>
+    <link rel="stylesheet" href="style.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <img src="logo_t.jpg" alt="Technova Hub Logo" class="logo">
+            <h1>AI Keyword Dashboard</h1>
+            <p>Empowering Minds through Data Extraction</p>
+        </header>
+
+        <main>
+            <section class="upload-section">
+                <div id="drop-zone">
+                    <p>Upload a PDF to analyze key phrases</p>
+                    <input type="file" id="fileInput" accept=".pdf">
+                    <button onclick="uploadFile()">Analyze Report</button>
+                </div>
+            </section>
+
+            <section id="result-section" class="hidden">
+                <div class="dashboard-grid">
+                    <div class="card">
+                        <h3>Keywords List</h3>
+                        <div id="keyword-container"></div>
+                    </div>
+                    <div class="card">
+                        <h3>Frequency Analysis</h3>
+                        <canvas id="keywordChart"></canvas>
+                    </div>
+                </div>
+            </section>
+        </main>
+    </div>
+    <script src="script.js"></script>
+</body>
+</html>
