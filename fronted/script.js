@@ -22,15 +22,30 @@ async function uploadFile() {
             body: formData
         });
 
+        if (!response.ok) {
+            const errorData = await response.json();
+            throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+        }
+
         const result = await response.json();
         if (result.success) {
             processAndDisplay(result.keywords);
         } else {
-            container.innerHTML = "Error: " + result.error;
+            container.innerHTML = "Error: " + (result.error || 'Unknown error occurred');
         }
     } catch (error) {
-        console.error("Error:", error);
-        container.innerHTML = "Connection failed.";
+        console.error("Upload Error:", error);
+        let errorMessage = "Connection failed.";
+        
+        if (error.message.includes('Failed to fetch')) {
+            errorMessage = "Network error. Please check your connection.";
+        } else if (error.message.includes('HTTP error')) {
+            errorMessage = `Server error: ${error.message}`;
+        } else {
+            errorMessage = `Error: ${error.message}`;
+        }
+        
+        container.innerHTML = errorMessage;
     }
 }
 
