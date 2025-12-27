@@ -23,11 +23,23 @@ async function uploadFile() {
         });
 
         if (!response.ok) {
-            const errorData = await response.json();
+            let errorData;
+            try {
+                errorData = await response.json();
+            } catch (jsonError) {
+                // If response is not JSON, get text instead
+                const errorText = await response.text();
+                throw new Error(errorText || `HTTP error! status: ${response.status}`);
+            }
             throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
         }
 
-        const result = await response.json();
+        let result;
+        try {
+            result = await response.json();
+        } catch (jsonError) {
+            throw new Error('Invalid response from server');
+        }
         if (result.success) {
             processAndDisplay(result.keywords);
         } else {
