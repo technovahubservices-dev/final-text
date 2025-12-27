@@ -17,7 +17,7 @@ async function uploadFile() {
     resultSection.classList.remove('hidden');
 
     try {
-        const response = await fetch('/api/upload', {
+        const response = await fetch('https://technova112.app.n8n.cloud/webhook/extract-report', {
             method: 'POST',
             body: formData
         });
@@ -38,12 +38,18 @@ async function uploadFile() {
         try {
             result = JSON.parse(responseText);
         } catch (jsonError) {
-            throw new Error('Invalid response from server');
+            // If response is not JSON, treat it as raw text keywords
+            processAndDisplay(responseText);
+            return;
         }
+        
+        // Handle different response formats
         if (result.success) {
             processAndDisplay(result.keywords);
+        } else if (result.data) {
+            processAndDisplay(result.data);
         } else {
-            container.innerHTML = "Error: " + (result.error || 'Unknown error occurred');
+            processAndDisplay(responseText);
         }
     } catch (error) {
         console.error("Upload Error:", error);
